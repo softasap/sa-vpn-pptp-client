@@ -1,6 +1,12 @@
 ---
 # tasks file for sa-vpn-pptp-client
 
+   - name: PPP Client | install dependencies
+     apt: package="{{item}}" state="present"
+     with_items:
+       - "pptp-linux"
+
+
    - name: PPP Client | Configure chap secrets /etc/ppp/chap-secrets
      template: src="{{role_dir}}/templates/chap-secrets.j2" dest="/etc/ppp/chap-secrets"
      become: yes
@@ -14,11 +20,11 @@
        - ppp-client
 
 # auto tunnel
-   - name: PPP Client | Configure interface
-     net_interface:
-        name: tunnel
-        duplex: auto
-        state: present
+#   - name: PPP Client | Configure interface
+#     net_interface:
+#        name: tunnel
+#        duplex: auto
+#        state: present
 
 #iface tunnel inet ppp
 # provider VPNprofile
@@ -28,7 +34,7 @@
         dest: /etc/network/interfaces
         iface: tunnel inet ppp
         attributes:
-          provider: "{{VPNprofile}}"
+          provider: "{{pptp_profile}}"
         backup: yes
         state: present
      register: vpn_tunnel

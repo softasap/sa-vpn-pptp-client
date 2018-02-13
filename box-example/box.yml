@@ -1,0 +1,48 @@
+---
+- hosts: www
+  gather_facts: False
+
+  vars:
+    - root_dir: ..
+    - target_pptp_user: vpn_name
+    - target_pptp_password: vpn_password
+
+    - target_pptp_server: pptp.server.hostname
+
+    - target_pptp_profile: VPNprofile
+
+    - target_ pptp_remote_network: "192.168.1.0"
+    - target_pptp_remote_network_mask: "255.255.255.0"
+
+
+
+  pre_tasks:
+    - debug: msg="Pre tasks section"
+
+    - name: ANSIBLE PYTHON | install python 2
+      raw: test -e /usr/bin/python || (apt -qqy update && apt install -qy python-minimal)
+      become: yes
+
+    - name:  UNPRIVILEGED USERS | Get acl dependency (ansible unprivileged user operations magic)
+      apt: pkg="acl"
+      become: yes
+
+    - name: gather facts
+      setup:
+
+  roles:
+     - {
+         role: "sa-vpn-pptp-client",
+         pptp_user: "{{target_pptp_user}}",
+         pptp_password: "{{target_pptp_password}}",
+         pptp_server: "{{target_pptp_server}}",
+         pptp_profile: "{{target_pptp_profile}}",
+         pptp_remote_network: "{{target_pptp_remote_network}}",
+         pptp_remote_network_mask: "{{target_pptp_remote_network_mask}}",
+       }
+
+
+  tasks:
+
+    - debug: msg="Tasks section"
+

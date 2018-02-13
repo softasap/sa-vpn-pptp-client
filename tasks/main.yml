@@ -1,0 +1,54 @@
+---
+# tasks file for sa-vpn-pptp-client
+
+   - name: PPP Client | Configure chap secrets /etc/ppp/chap-secrets
+     template: src="{{role_dir}}/templates/chap-secrets.j2" dest="/etc/ppp/chap-secrets"
+     become: yes
+     tags:
+       - ppp-client
+
+   - name: PPP Client | Configure profile /etc/ppp/peers/VPNprofile
+     template: src="{{role_dir}}/templates/vpnprofile.j2" dest="/etc/ppp/peers/{{pptp_profile}}"
+     become: yes
+     tags:
+       - ppp-client
+
+# auto tunnel
+   - name: PPP Client | Configure interface
+     net_interface:
+        name: tunnel
+        duplex: auto
+        state: present
+
+#iface tunnel inet ppp
+# provider VPNprofile
+
+   - name: PPP Client | Configure profile /etc/ppp/peers/VPNprofile
+     interfaces_file:
+        dest: /etc/network/interfaces
+        iface: tunnel inet ppp
+        attributes:
+          provider: "{{VPNprofile}}"
+        backup: yes
+        state: present
+     register: vpn_tunnel
+
+
+   - name: PPP Client | Configure /etc/ppp/ip-up.d/VPNprofile
+     template: src="{{role_dir}}/templates/profile_up.j2" dest="/etc/ppp/ip-up.d/{{pptp_profile}}" mode="u=rwx,g=rx,o=rx"
+     become: yes
+     tags:
+       - ppp-client
+
+   - name: PPP Client | Configure /etc/ppp/ip-down.d/VPNprofile
+     template: src="{{role_dir}}/templates/profile_down.j2" dest="/etc/ppp/ip-down.d/{{pptp_profile}}" mode="u=rwx,g=rx,o=rx"
+     become: yes
+     tags:
+       - ppp-client
+
+
+   - name: PPP Client | Restart networking
+     service: name="networking" state="restarted"
+     become: yes
+     tags:
+       - ppp-client

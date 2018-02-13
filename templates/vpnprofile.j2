@@ -1,0 +1,8 @@
+pty "pptp {{pptp_server}} --nolaunchpppd"
+name {{pptp_name}}
+remotename PPTP
+require-mppe-128
+file /etc/ppp/options.pptp
+maxfail 0
+persist
+ipparam {{pptp_profile}}

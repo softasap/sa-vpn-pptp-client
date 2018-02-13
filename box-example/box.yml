@@ -7,11 +7,11 @@
     - target_pptp_user: vpn_name
     - target_pptp_password: vpn_password
 
-    - target_pptp_server: pptp.server.hostname
+    - target_pptp_server: vpn.host.addr
 
     - target_pptp_profile: VPNprofile
 
-    - target_ pptp_remote_network: "192.168.1.0"
+    - target_pptp_remote_network: "192.168.1.0"
     - target_pptp_remote_network_mask: "255.255.255.0"
 
 
@@ -45,4 +45,3 @@
   tasks:
 
     - debug: msg="Tasks section"
-

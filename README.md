@@ -1,7 +1,7 @@
 sa-vpn-pptp-client
 ==================
 
-[![Build Status](https://travis-ci.org/softasap/sa-java.svg?branch=master)](https://travis-ci.org/softasap/sa-java)
+[![Build Status](https://travis-ci.org/softasap/sa-vpn-pptp-client.svg?branch=master)](https://travis-ci.org/softasap/sa-vpn-pptp-client)
 
 Helper repo for smarthome
 

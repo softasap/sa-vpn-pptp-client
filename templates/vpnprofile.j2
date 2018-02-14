@@ -1,7 +1,11 @@
-pty "pptp {{pptp_server}} --nolaunchpppd"
+pty "pptp {{pptp_server}} --nolaunchpppd --loglevel {{pptp_loglevel | default(0)}} --logstring {{pptp_profile}}"
 name {{pptp_user}}
 remotename PPTP
 require-mppe-128
+refuse-eap
+refuse-pap
+refuse-chap
+#refuse-mschap
 file /etc/ppp/options.pptp
 maxfail 0
 persist

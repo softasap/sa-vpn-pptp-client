@@ -19,25 +19,16 @@
      tags:
        - ppp-client
 
-# auto tunnel
-#   - name: PPP Client | Configure interface
-#     net_interface:
-#        name: tunnel
-#        duplex: auto
-#        state: present
-
-#iface tunnel inet ppp
-# provider VPNprofile
-
-   - name: PPP Client | Configure profile /etc/ppp/peers/VPNprofile
-     interfaces_file:
+   - name: PPP Client | Configure tunnel in /etc/network/interfaces
+     blockinfile:
         dest: /etc/network/interfaces
-        iface: tunnel inet ppp
-        attributes:
-          provider: "{{pptp_profile}}"
-        backup: yes
-        state: present
-     register: vpn_tunnel
+        block: |
+          auto tunnel
+          iface tunnel inet ppp
+              provider {{pptp_profile}}
+     become: yes
+     tags:
+       - ppp-client
 
 
    - name: PPP Client | Configure /etc/ppp/ip-up.d/VPNprofile

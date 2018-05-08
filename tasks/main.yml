@@ -21,6 +21,7 @@
 
    - name: PPP Client | Configure tunnel in /etc/network/interfaces
      blockinfile:
+        create: yes
         dest: /etc/network/interfaces
         block: |
           auto tunnel
